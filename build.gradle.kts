@@ -1,4 +1,3 @@
-import org.gradle.accessors.dm.LibrariesForLibs
 import pl.allegro.tech.build.axion.release.domain.PredefinedVersionCreator.VERSION_WITH_BRANCH
 import java.lang.System.getenv
 
