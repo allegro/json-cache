@@ -1,7 +1,7 @@
 [versions]
 axion-release-plugin = "1.15.5"
-nexus-publish-plugin = "1.1.0"
-test-logger = "3.2.0"
+nexus-publish-plugin = "1.3.0"
+test-logger = "4.0.0"
 
 junit = "5.10.0"
 
