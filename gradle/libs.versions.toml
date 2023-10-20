@@ -1,8 +1,13 @@
 [versions]
+# plugins
 axion-release-plugin = "1.15.5"
 nexus-publish-plugin = "1.3.0"
 test-logger = "4.0.0"
 
+# core libs
+jackson = "2.15.3"
+
+# test libs
 junit = "5.10.0"
 
 [plugins]
@@ -11,6 +16,9 @@ nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "n
 test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 
 [libraries]
+# core libs
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson"}
+# test libs
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
 junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
 
