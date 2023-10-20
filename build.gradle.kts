@@ -1,3 +1,4 @@
+import org.gradle.accessors.dm.LibrariesForLibs
 import pl.allegro.tech.build.axion.release.domain.PredefinedVersionCreator.VERSION_WITH_BRANCH
 import java.lang.System.getenv
 
@@ -16,10 +17,12 @@ scmVersion {
 
 allprojects {
     project.group = "pl.allegro.tech.jsoncache"
-    project.version = scmVersion.version
+    project.version = rootProject.scmVersion.version
 }
 
 subprojects {
+    val libs = rootProject.libs
+
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
