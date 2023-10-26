@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-@SuppressWarnings("unused")
 public class KeyBuilderStrategies {
 
     public static class StrategyMatchingMetadata implements ArgumentsProvider {
