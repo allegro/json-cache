@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -40,7 +40,7 @@ public class MapBasedEntityCacheTest {
         Object testObject = new Object();
 
         // and
-        Map<String, Object> precomputedCache = new HashMap<>();
+        ConcurrentMap<String, Object> precomputedCache = new ConcurrentHashMap<>();
         precomputedCache.put(key, testObject);
         EntityCache<String, Object> cache = new MapBasedEntityCache<>(() -> precomputedCache);
 
@@ -82,7 +82,7 @@ public class MapBasedEntityCacheTest {
         Object testObject = new Object();
 
         // and
-        Map<String, Object> precomputedCache = new HashMap<>();
+        ConcurrentMap<String, Object> precomputedCache = new ConcurrentHashMap<>();
         precomputedCache.put(key, testObject);
         EntityCache<String, Object> cache = new MapBasedEntityCache<>(() -> precomputedCache);
 
@@ -104,7 +104,7 @@ public class MapBasedEntityCacheTest {
         Object testObject = new Object();
 
         // and
-        Map<String, Object> precomputedCache = new HashMap<>();
+        ConcurrentMap<String, Object> precomputedCache = new ConcurrentHashMap<>();
         precomputedCache.put(key, testObject);
         EntityCache<String, Object> cache = new MapBasedEntityCache<>(() -> precomputedCache);
 

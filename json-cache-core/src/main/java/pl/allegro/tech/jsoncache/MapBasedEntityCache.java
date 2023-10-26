@@ -1,18 +1,18 @@
 package pl.allegro.tech.jsoncache;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
 
 public class MapBasedEntityCache<K, V> implements EntityCache<K, V> {
 
-    private final Map<K, V> map;
+    private final ConcurrentMap<K, V> map;
 
     public MapBasedEntityCache() {
-        this(HashMap::new);
+        this(ConcurrentHashMap::new);
     }
 
-    public MapBasedEntityCache(Supplier<? extends Map<K, V>> mapSupplier) {
+    public MapBasedEntityCache(Supplier<? extends ConcurrentMap<K, V>> mapSupplier) {
         this.map = mapSupplier.get();
     }
 
