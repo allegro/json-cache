@@ -11,3 +11,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+include("json-cache-test")
+include("json-cache-core")

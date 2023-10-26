@@ -16,10 +16,12 @@ scmVersion {
 
 allprojects {
     project.group = "pl.allegro.tech.jsoncache"
-    project.version = scmVersion.version
+    project.version = rootProject.scmVersion.version
 }
 
 subprojects {
+    val libs = rootProject.libs
+
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
