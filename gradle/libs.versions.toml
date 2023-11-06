@@ -3,7 +3,7 @@ axion-release-plugin = "1.15.5"
 nexus-publish-plugin = "1.3.0"
 test-logger = "4.0.0"
 
-junit = "5.10.0"
+junit = "5.10.1"
 
 [plugins]
 axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axion-release-plugin" }
