@@ -1,5 +1,5 @@
 [versions]
-axion-release-plugin = "1.15.5"
+axion-release-plugin = "1.16.1"
 nexus-publish-plugin = "1.3.0"
 test-logger = "4.0.0"
 
