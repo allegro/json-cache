@@ -46,6 +46,9 @@ subprojects {
         withType<Test> {
             useJUnitPlatform()
         }
+        withType<Javadoc> {
+            (options as StandardJavadocDocletOptions).tags = listOf("apiNote")
+        }
     }
 
     publishing {

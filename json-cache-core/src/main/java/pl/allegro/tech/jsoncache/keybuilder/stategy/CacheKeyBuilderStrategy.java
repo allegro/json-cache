@@ -29,6 +29,14 @@ public interface CacheKeyBuilderStrategy<K, V> {
      */
     boolean supports(CacheableEntity entityDescriptor);
 
+    /**
+     * Determine if strategy is able to extract key from provided value.
+     * This method is a convenient way to deal with type erasure (e.g. while filtering
+     * {@link java.util.Collection collection} of strategies).
+     *
+     * @param valueType type of value to inspect
+     * @return {@code true} if type is supported, {@code false} otherwise
+     */
     boolean canExtractKeyFrom(Class<?> valueType);
 
 }

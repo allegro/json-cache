@@ -6,6 +6,9 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.StringJoiner;
 
+/**
+ * Dynamically create metadata about {@link CacheableEntity}.
+ */
 public class CacheableEntityBuilder {
 
     private static final String DEFAULT_TEMPLATE = "";
@@ -16,31 +19,66 @@ public class CacheableEntityBuilder {
     private String keySeparator;
     private String cacheName;
 
+    /**
+     * Alias for {@link CacheableEntity#keyTemplate()}.
+     *
+     * @param keyTemplate template
+     * @return this builder for chaining
+     */
     public CacheableEntityBuilder withKeyTemplate(String keyTemplate) {
         this.keyTemplate = keyTemplate;
         return this;
     }
 
+    /**
+     * Alias for singular {@link CacheableEntity#keyComponents()}.
+     *
+     * @param keyComponent singular component
+     * @return this builder for chaining
+     */
     public CacheableEntityBuilder withKeyComponent(String keyComponent) {
         this.keyComponents = new String[]{keyComponent};
         return this;
     }
 
+    /**
+     * Alias for multiple {@link CacheableEntity#keyComponents()}.
+     *
+     * @param keyComponents multiple components
+     * @return this builder for chaining
+     */
     public CacheableEntityBuilder withKeyComponents(String... keyComponents) {
         this.keyComponents = Arrays.copyOf(keyComponents, keyComponents.length);
         return this;
     }
 
+    /**
+     * Alias for {@link CacheableEntity#keySeparator()}.
+     *
+     * @param keySeparator key separator
+     * @return this builder for chaining
+     */
     public CacheableEntityBuilder withKeySeparator(String keySeparator) {
         this.keySeparator = keySeparator;
         return this;
     }
 
+    /**
+     * Alias for {@link CacheableEntity#cacheName()}.
+     *
+     * @param cacheName cache name
+     * @return this builder for chaining
+     */
     public CacheableEntityBuilder withCacheName(String cacheName) {
         this.cacheName = cacheName;
         return this;
     }
 
+    /**
+     * Create metadata object with previously specified configuration.
+     *
+     * @return configured {@link CacheableEntity entity}
+     */
     public CacheableEntity build() {
         return new CacheableEntity() {
 

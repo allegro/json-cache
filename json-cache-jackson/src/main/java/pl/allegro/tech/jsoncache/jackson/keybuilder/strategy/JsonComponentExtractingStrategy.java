@@ -6,6 +6,9 @@ import pl.allegro.tech.jsoncache.keybuilder.stategy.KeyComponentBasedStrategy;
 
 import java.util.Optional;
 
+/**
+ * Strategy for retrieving key parts directly from {@link JsonNode json nodes}.
+ */
 public class JsonComponentExtractingStrategy extends KeyComponentBasedStrategy<JsonNode> {
 
     @Override
