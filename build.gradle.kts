@@ -33,6 +33,7 @@ subprojects {
         toolchain {
             languageVersion = JavaLanguageVersion.of(17)
         }
+
     }
 
     dependencies {
@@ -45,6 +46,9 @@ subprojects {
         }
         withType<Test> {
             useJUnitPlatform()
+        }
+        withType<Javadoc> {
+            (options as StandardJavadocDocletOptions).tags = listOf("apiNote")
         }
     }
 
