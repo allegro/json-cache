@@ -33,7 +33,6 @@ subprojects {
         toolchain {
             languageVersion = JavaLanguageVersion.of(17)
         }
-
     }
 
     dependencies {
