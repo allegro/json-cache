@@ -15,9 +15,21 @@ import pl.allegro.tech.jsoncache.keybuilder.CacheKeyBuilderFactory;
  */
 public class CacheApplyingDeserializerModifier extends BeanDeserializerModifier {
 
+    /**
+     * Key building factory.
+     */
     private final CacheKeyBuilderFactory cacheKeyBuilderFactory;
+    /**
+     * Cache resolver.
+     */
     private final CacheResolver cacheResolver;
 
+    /**
+     * Default constructor.
+     *
+     * @param cacheKeyBuilderFactory {@link CacheKeyBuilderFactory key building factory}
+     * @param cacheResolver {@link CacheResolver cache resolver}
+     */
     public CacheApplyingDeserializerModifier(CacheKeyBuilderFactory cacheKeyBuilderFactory, CacheResolver cacheResolver) {
         this.cacheKeyBuilderFactory = cacheKeyBuilderFactory;
         this.cacheResolver = cacheResolver;

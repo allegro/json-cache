@@ -21,9 +21,22 @@ import java.io.IOException;
  */
 public class CacheSupportingDeserializer<K> extends DelegatingDeserializer {
 
+    /**
+     * Entity cache.
+     */
     private final EntityCache<K, Object> cache;
+    /**
+     * Key builder for given entity.
+     */
     private final CacheKeyBuilder<K, JsonNode> keyBuilder;
 
+    /**
+     * Default constructor.
+     *
+     * @param originalDeserializer original {@link JsonDeserializer deserializer}
+     * @param cache                {@link EntityCache cache}
+     * @param keyBuilder           {@link CacheKeyBuilder key builder}
+     */
     public CacheSupportingDeserializer(JsonDeserializer<?> originalDeserializer,
                                        EntityCache<K, Object> cache,
                                        CacheKeyBuilder<K, JsonNode> keyBuilder) {
