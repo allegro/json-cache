@@ -8,7 +8,7 @@ test-logger = "4.0.0"
 jackson = "2.17.0"
 
 # test libs
-junit = "5.10.2"
+junit = "5.10.3"
 
 [plugins]
 axion-release = { id = "pl.allegro.tech.build.axion-release", version.ref = "axion-release-plugin" }
