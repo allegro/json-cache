@@ -16,6 +16,11 @@ public class CacheKeyBuilderFactory {
 
     private final List<CacheKeyBuilderStrategy<?, ?>> cacheKeyBuilderStrategies;
 
+    /**
+     * Primary constructor for this factory.
+     *
+     * @param cacheKeyBuilderStrategies collection of {@link CacheKeyBuilderStrategy strategies}
+     */
     public CacheKeyBuilderFactory(Collection<? extends CacheKeyBuilderStrategy<?, ?>> cacheKeyBuilderStrategies) {
         this.cacheKeyBuilderStrategies = List.copyOf(cacheKeyBuilderStrategies);
     }
@@ -23,7 +28,9 @@ public class CacheKeyBuilderFactory {
     /**
      * Select suitable strategy and prepare {@link CacheKeyBuilder key builder}.
      *
-     * @param entityDescriptor entity cache metadata
+     * @param <V>                value type to build key from
+     * @param entityDescriptor   entity cache metadata
+     * @param supportedValueType value type to build key from
      * @return {@link Optional optional} key builder or {@link Optional#empty() empty} otherwise
      * @apiNote we don't specify any generic parameters as they might get erased while dynamically autowiring key builder
      */
