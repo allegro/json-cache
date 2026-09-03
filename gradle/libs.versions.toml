@@ -1,11 +1,13 @@
 [versions]
+java = "17"
+
 # plugins
-axion-release-plugin = "1.17.0"
+axion-release-plugin = "1.21.3"
 nexus-publish-plugin = "2.0.0"
 test-logger = "4.0.0"
 
 # core libs
-jackson = "2.17.0"
+jackson = "2.22.2"
 
 # test libs
 junit = "5.10.2"
@@ -19,8 +21,10 @@ test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 # core libs
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson"}
 # test libs
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
-junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-dependencies = { group = "org.junit", name = "junit-bom", version.ref = "junit" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
+junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 
 [bundles]
 junit = ["junit-jupiter", "junit-jupiter-params"]
