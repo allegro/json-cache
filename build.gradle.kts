@@ -56,7 +56,7 @@ subprojects {
 
     publishing {
         publications {
-            create<MavenPublication>("mavenJava") {
+            create<MavenPublication>("sonatype") {
                 from(components["java"])
                 pom {
                     name = project.name
