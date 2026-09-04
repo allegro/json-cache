@@ -31,12 +31,15 @@ subprojects {
         withSourcesJar()
         withJavadocJar()
         toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
+            languageVersion = libs.versions.java.map(JavaLanguageVersion::of)
         }
     }
 
     dependencies {
+        testImplementation(platform(libs.junit.dependencies))
         testImplementation(libs.bundles.junit)
+
+        testRuntimeOnly(libs.junit.platform.launcher)
     }
 
     tasks {
@@ -98,29 +101,25 @@ subprojects {
         }
     }
 
-    getenv("GPG_KEY_ID")?.let {
-        signing {
-            useInMemoryPgpKeys(
-                it,
-                getenv("GPG_PRIVATE_KEY"),
-                getenv("GPG_PRIVATE_KEY_PASSWORD")
-            )
-            sign(publishing.publications["mavenJava"])
-        }
+    signing {
+        val gpgKeyId = getenv("GPG_KEY_ID") ?: return@signing
+        val gpgPrivateKey = getenv("GPG_PRIVATE_KEY") ?: return@signing
+        val gpgPrivateKeyPassword = getenv("GPG_PRIVATE_KEY_PASSWORD") ?: return@signing
+
+        useInMemoryPgpKeys(gpgKeyId, gpgPrivateKey, gpgPrivateKeyPassword)
+        sign(publishing.publications["sonatype"])
     }
 }
 
 nexusPublishing {
     repositories {
         sonatype {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
             username = getenv("SONATYPE_USERNAME")
             password = getenv("SONATYPE_PASSWORD")
         }
     }
-}
-
-tasks.withType<Wrapper> {
-    gradleVersion = "8.4"
 }
 
 infix fun <T : PluginDependency> PluginAware.apply(plugin: Provider<T>) {
