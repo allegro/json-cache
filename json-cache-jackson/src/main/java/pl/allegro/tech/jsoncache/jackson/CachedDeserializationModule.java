@@ -1,12 +1,12 @@
 package pl.allegro.tech.jsoncache.jackson;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.Module;
+import tools.jackson.core.Version;
+import tools.jackson.databind.JacksonModule;
 
 /**
  * Jackson module that allows registration of {@link CacheApplyingDeserializerModifier deserializer modifier}.
  */
-public class CachedDeserializationModule extends Module {
+public class CachedDeserializationModule extends JacksonModule {
 
     private static final String MODULE_NAME = "cached-deserialization";
     private static final Version VERSION = new Version(1, 0, 0, null, "pl.allegro.tech", "json-cache-jackson");
@@ -33,8 +33,8 @@ public class CachedDeserializationModule extends Module {
     }
 
     @Override
-    public void setupModule(SetupContext context) {
-        context.addBeanDeserializerModifier(cacheApplyingDeserializerModifier);
+    public void setupModule(JacksonModule.SetupContext context) {
+        context.addDeserializerModifier(cacheApplyingDeserializerModifier);
     }
 
 }

@@ -1,8 +1,8 @@
 package pl.allegro.tech.jsoncache.jackson.keybuilder.strategy;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.JsonNodeFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import pl.allegro.tech.jsoncache.CacheableEntity;
