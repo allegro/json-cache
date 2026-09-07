@@ -86,7 +86,7 @@ Follow those simple steps:
 dependencies {
     implementation group: 'pl.allegro.tech', name: 'json-cache-jackson', version: '...'
     // above module doesn't supply dependent libraries to avoid dependency pollution, so make sure you include them yourself
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '...'
+    implementation group: 'tools.jackson.core', name: 'jackson-databind', version: '...'
 }
 ```
 

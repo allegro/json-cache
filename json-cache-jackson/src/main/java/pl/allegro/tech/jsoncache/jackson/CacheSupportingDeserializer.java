@@ -1,16 +1,15 @@
 package pl.allegro.tech.jsoncache.jackson;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.DelegatingDeserializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.ObjectReadContext;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.deser.std.DelegatingDeserializer;
 import pl.allegro.tech.jsoncache.EntityCache;
 import pl.allegro.tech.jsoncache.keybuilder.CacheKeyBuilder;
 import pl.allegro.tech.jsoncache.keybuilder.KeyBuildingException;
-
-import java.io.IOException;
 
 /**
  * Deserializer that wraps default deserializer and caches created instances in memory by key constructed using
@@ -33,11 +32,11 @@ public class CacheSupportingDeserializer<K> extends DelegatingDeserializer {
     /**
      * Default constructor.
      *
-     * @param originalDeserializer original {@link JsonDeserializer deserializer}
+     * @param originalDeserializer original {@link ValueDeserializer deserializer}
      * @param cache                {@link EntityCache cache}
      * @param keyBuilder           {@link CacheKeyBuilder key builder}
      */
-    public CacheSupportingDeserializer(JsonDeserializer<?> originalDeserializer,
+    public CacheSupportingDeserializer(ValueDeserializer<?> originalDeserializer,
                                        EntityCache<K, Object> cache,
                                        CacheKeyBuilder<K, JsonNode> keyBuilder) {
         super(originalDeserializer);
@@ -46,7 +45,7 @@ public class CacheSupportingDeserializer<K> extends DelegatingDeserializer {
     }
 
     @Override
-    protected JsonDeserializer<?> newDelegatingInstance(JsonDeserializer<?> newDelegatee) {
+    protected ValueDeserializer<?> newDelegatingInstance(ValueDeserializer<?> newDelegatee) {
         return new CacheSupportingDeserializer<>(newDelegatee, cache, keyBuilder);
     }
 
@@ -60,24 +59,24 @@ public class CacheSupportingDeserializer<K> extends DelegatingDeserializer {
      * @param ctxt Context that can be used to access information about
      *             this deserialization activity
      * @return deserialized instance
-     * @throws IOException in case JSON cannot be properly parsed or deserialized
+     * @throws JacksonException in case JSON cannot be properly parsed or deserialized
      */
     @Override
-    public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public Object deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
         JsonNode parsedJson = ctxt.readTree(p);
         try {
             return cache.computeIfAbsent(
                     keyBuilder.buildKey(parsedJson),
-                    key -> deserializeJson(parsedJson, p.getCodec(), ctxt)
+                    key -> deserializeJson(parsedJson, p.objectReadContext(), ctxt)
             );
         } catch (KeyBuildingException ex) {
-            return deserializeJson(parsedJson, p.getCodec(), ctxt);
+            return deserializeJson(parsedJson, p.objectReadContext(), ctxt);
         }
     }
 
-    private Object deserializeJson(JsonNode parsedJson, ObjectCodec originalCodec, DeserializationContext ctxt)
-            throws IOException {
-        JsonParser p = parsedJson.traverse(originalCodec);
+    private Object deserializeJson(JsonNode parsedJson, ObjectReadContext originalReadContext, DeserializationContext ctxt)
+            throws JacksonException {
+        JsonParser p = parsedJson.traverse(originalReadContext);
         if (p.currentToken() == null) {
             p.nextToken();
         }

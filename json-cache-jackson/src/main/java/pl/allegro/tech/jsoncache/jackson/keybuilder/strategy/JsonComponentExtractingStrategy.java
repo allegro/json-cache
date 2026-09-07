@@ -1,10 +1,8 @@
 package pl.allegro.tech.jsoncache.jackson.keybuilder.strategy;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import pl.allegro.tech.jsoncache.keybuilder.KeyPartMissingException;
 import pl.allegro.tech.jsoncache.keybuilder.stategy.KeyComponentBasedStrategy;
-
-import java.util.Optional;
 
 /**
  * Strategy for retrieving key parts directly from {@link JsonNode json nodes}.
@@ -13,9 +11,9 @@ public class JsonComponentExtractingStrategy extends KeyComponentBasedStrategy<J
 
     @Override
     protected String extractKeyPart(JsonNode value, String component) throws KeyPartMissingException {
-        return Optional.ofNullable(value.get(component))
+        return value.optional(component)
                 .filter(JsonNode::isValueNode)
-                .map(JsonNode::asText)
+                .map(JsonNode::asString)
                 .orElseThrow(() -> new KeyPartMissingException(value, component));
     }
 
