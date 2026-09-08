@@ -9,6 +9,7 @@ import pl.allegro.tech.jsoncache.CacheableEntity;
 import pl.allegro.tech.jsoncache.keybuilder.KeyBuildingException;
 import pl.allegro.tech.jsoncache.keybuilder.stategy.CacheKeyBuilderStrategy;
 import pl.allegro.tech.jsoncache.support.CacheableEntityBuilder;
+import tools.jackson.databind.node.ObjectNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,6 +27,30 @@ public class JsonComponentExtractingStrategyTest {
         // and
         CacheableEntity entityDescriptor = new CacheableEntityBuilder()
                 .withKeyComponents("a", "b")
+                .withKeySeparator("-")
+                .build();
+
+        // and
+        CacheKeyBuilderStrategy<String, JsonNode> strategy = new JsonComponentExtractingStrategy();
+
+        // when
+        String key = strategy.prepareBuilder(entityDescriptor).buildKey(value);
+
+        // then
+        assertEquals("1-2", key);
+    }
+
+    @Test
+    public void shouldExtractKeyFromNestedValueIfDescriptorUsesDotNotation() throws Exception {
+        // given
+        ObjectNode value = JsonNodeFactory.instance.objectNode()
+                .put("a", 1);
+        value.putObject("b")
+                .put("nested", 2);
+
+        // and
+        CacheableEntity entityDescriptor = new CacheableEntityBuilder()
+                .withKeyComponents("a", "b.nested")
                 .withKeySeparator("-")
                 .build();
 
