@@ -5,26 +5,25 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MapBasedEntityCacheTest {
+class MapBasedEntityCacheTest {
 
     @Test
-    public void shouldInsertElement() {
+    void shouldInsertElement() {
         // given
-        EntityCache<String, Object> cache = new MapBasedEntityCache<>();
+        var cache = new MapBasedEntityCache<>();
 
         // and
-        String key = "key";
-        Object testObject = new Object();
+        var key = "key";
+        var testObject = new Object();
 
         // when
-        Object previous = cache.put(key, testObject);
+        var previous = cache.put(key, testObject);
 
         // then
         assertNull(previous);
@@ -34,21 +33,21 @@ public class MapBasedEntityCacheTest {
     }
 
     @Test
-    public void shouldReplaceElement() {
+    void shouldReplaceElement() {
         // given
-        String key = "key";
-        Object testObject = new Object();
+        var key = "key";
+        var testObject = new Object();
 
         // and
-        ConcurrentMap<String, Object> precomputedCache = new ConcurrentHashMap<>();
+        var precomputedCache = new ConcurrentHashMap<String, Object>();
         precomputedCache.put(key, testObject);
-        EntityCache<String, Object> cache = new MapBasedEntityCache<>(() -> precomputedCache);
+        var cache = new MapBasedEntityCache<>(() -> precomputedCache);
 
         // and
-        Object newObject = new Object();
+        var newObject = new Object();
 
         // when
-        Object previous = cache.put(key, newObject);
+        var previous = cache.put(key, newObject);
 
         // then
         assertSame(previous, testObject);
@@ -58,17 +57,16 @@ public class MapBasedEntityCacheTest {
     }
 
     @Test
-    public void shouldComputeElement() throws Exception {
+    void shouldComputeElement() {
         // given
-        EntityCache<String, Object> cache = new MapBasedEntityCache<>();
+        var cache = new MapBasedEntityCache<>();
 
         // and
-        String key = "key";
-        Object testObject = new Object();
-        CacheLoader<String, Object, ?> loader = k -> testObject;
+        var key = "key";
+        var testObject = new Object();
 
         // when
-        Object computed = cache.computeIfAbsent(key, loader);
+        var computed = cache.computeIfAbsent(key, k -> testObject);
 
         // then
         assertEquals(1L, cache.size());
@@ -76,21 +74,18 @@ public class MapBasedEntityCacheTest {
     }
 
     @Test
-    public void shouldNotComputeIfEntryForGivenKeyAlreadyExists() throws Exception {
+    void shouldNotComputeIfEntryForGivenKeyAlreadyExists() {
         // given
-        String key = "key";
-        Object testObject = new Object();
+        var key = "key";
+        var testObject = new Object();
 
         // and
-        ConcurrentMap<String, Object> precomputedCache = new ConcurrentHashMap<>();
+        var precomputedCache = new ConcurrentHashMap<String, Object>();
         precomputedCache.put(key, testObject);
-        EntityCache<String, Object> cache = new MapBasedEntityCache<>(() -> precomputedCache);
-
-        // and
-        CacheLoader<String, Object, ?> loader = k -> new Object();
+        var cache = new MapBasedEntityCache<>(() -> precomputedCache);
 
         // when
-        Object computed = cache.computeIfAbsent(key, loader);
+        var computed = cache.computeIfAbsent(key, k -> new Object());
 
         // then
         assertSame(computed, testObject);
@@ -98,15 +93,15 @@ public class MapBasedEntityCacheTest {
     }
 
     @Test
-    public void shouldInvalidateCache() {
+    void shouldInvalidateCache() {
         // given
-        String key = "key";
-        Object testObject = new Object();
+        var key = "key";
+        var testObject = new Object();
 
         // and
-        ConcurrentMap<String, Object> precomputedCache = new ConcurrentHashMap<>();
+        var precomputedCache = new ConcurrentHashMap<String, Object>();
         precomputedCache.put(key, testObject);
-        EntityCache<String, Object> cache = new MapBasedEntityCache<>(() -> precomputedCache);
+        var cache = new MapBasedEntityCache<>(() -> precomputedCache);
 
         // when
         cache.invalidateAll();
@@ -116,18 +111,17 @@ public class MapBasedEntityCacheTest {
     }
 
     @Test
-    public void shouldRethrowAnExceptionIfCacheLoaderFails() {
+    void shouldRethrowAnExceptionIfCacheLoaderFails() {
         // given
-        EntityCache<String, Object> cache = new MapBasedEntityCache<>();
+        var cache = new MapBasedEntityCache<>();
 
         // and
-        String key = "key";
-        CacheLoader<String, Object, IOException> loader = k -> {
-            throw new IOException();
-        };
+        var key = "key";
 
         // when
-        Executable compute = () -> cache.computeIfAbsent(key, loader);
+        var compute = (Executable) () -> cache.computeIfAbsent(key, k -> {
+            throw new IOException();
+        });
 
         // then
         assertThrows(IOException.class, compute);

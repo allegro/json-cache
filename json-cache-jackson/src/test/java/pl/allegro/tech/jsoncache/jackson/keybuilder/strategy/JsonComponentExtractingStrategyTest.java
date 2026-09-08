@@ -1,86 +1,102 @@
 package pl.allegro.tech.jsoncache.jackson.keybuilder.strategy;
 
-
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.node.JsonNodeFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import pl.allegro.tech.jsoncache.CacheableEntity;
 import pl.allegro.tech.jsoncache.keybuilder.KeyBuildingException;
 import pl.allegro.tech.jsoncache.keybuilder.stategy.CacheKeyBuilderStrategy;
 import pl.allegro.tech.jsoncache.support.CacheableEntityBuilder;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.JsonNodeFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JsonComponentExtractingStrategyTest {
+class JsonComponentExtractingStrategyTest {
+
+    private final CacheKeyBuilderStrategy<String, JsonNode> strategy = new JsonComponentExtractingStrategy();
 
     @Test
-    public void shouldExtractKeyFromValueIfDescriptorProvidesKeyComponents() throws Exception {
+    void shouldExtractKeyFromValueIfDescriptorProvidesKeyComponents() throws Exception {
         // given
-        JsonNode value = JsonNodeFactory.instance.objectNode()
+        var value = JsonNodeFactory.instance.objectNode()
                 .put("a", 1)
                 .put("b", 2);
 
         // and
-        CacheableEntity entityDescriptor = new CacheableEntityBuilder()
+        var entityDescriptor = new CacheableEntityBuilder()
                 .withKeyComponents("a", "b")
                 .withKeySeparator("-")
                 .build();
 
-        // and
-        CacheKeyBuilderStrategy<String, JsonNode> strategy = new JsonComponentExtractingStrategy();
-
         // when
-        String key = strategy.prepareBuilder(entityDescriptor).buildKey(value);
+        var keyBuilder = strategy.prepareBuilder(entityDescriptor);
+        var key = keyBuilder.buildKey(value);
 
         // then
         assertEquals("1-2", key);
     }
 
     @Test
-    public void shouldThrowExceptionIfValueHasMissingKeyParts() {
+    void shouldExtractKeyFromNestedValueIfDescriptorUsesDotNotation() throws Exception {
         // given
-        JsonNode value = JsonNodeFactory.instance.objectNode()
+        var value = JsonNodeFactory.instance.objectNode()
+                .put("a", 1);
+        value.putObject("b")
+                .put("nested", 2);
+
+        // and
+        var entityDescriptor = new CacheableEntityBuilder()
+                .withKeyComponents("a", "b.nested")
+                .withKeySeparator("-")
+                .build();
+
+        // when
+        var keyBuilder = strategy.prepareBuilder(entityDescriptor);
+        var key = keyBuilder.buildKey(value);
+
+        // then
+        assertEquals("1-2", key);
+    }
+
+    @Test
+    void shouldThrowExceptionIfValueHasMissingKeyParts() throws Exception {
+        // given
+        var value = JsonNodeFactory.instance.objectNode()
                 .put("a", 1);
 
         // and
-        CacheableEntity entityDescriptor = new CacheableEntityBuilder()
+        var entityDescriptor = new CacheableEntityBuilder()
                 .withKeyComponents("a", "b")
                 .withKeySeparator("-")
                 .build();
 
-        // and
-        CacheKeyBuilderStrategy<String, JsonNode> strategy = new JsonComponentExtractingStrategy();
-
         // when
-        Executable keyBuilding = () -> strategy.prepareBuilder(entityDescriptor).buildKey(value);
+        var keyBuilder = strategy.prepareBuilder(entityDescriptor);
+        var keySupplier = (Executable) () -> keyBuilder.buildKey(value);
 
         // then
-        assertThrows(KeyBuildingException.class, keyBuilding);
+        assertThrows(KeyBuildingException.class, keySupplier);
     }
 
     @Test
-    public void shouldExtractEmptyKeyFromValueIfDescriptorProvidesNoKeyComponents() throws Exception {
+    void shouldExtractEmptyKeyFromValueIfDescriptorProvidesNoKeyComponents() throws Exception {
         // given
-        JsonNode value = JsonNodeFactory.instance.objectNode()
+        var value = JsonNodeFactory.instance.objectNode()
                 .put("a", 1)
                 .put("b", 2);
 
         // and
-        CacheableEntity entityDescriptor = new CacheableEntityBuilder()
+        var entityDescriptor = new CacheableEntityBuilder()
                 .withKeyTemplate("{{a}}-{{b}}")
                 .build();
 
-        // and
-        CacheKeyBuilderStrategy<String, JsonNode> strategy = new JsonComponentExtractingStrategy();
-
         // when
-        String key = strategy.prepareBuilder(entityDescriptor).buildKey(value);
+        var keyBuilder = strategy.prepareBuilder(entityDescriptor);
+        var key = keyBuilder.buildKey(value);
 
         // then
-        assertTrue(key::isEmpty);
+        assertTrue(key.isEmpty());
     }
 
 }
