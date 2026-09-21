@@ -2,7 +2,7 @@
 java = "17"
 
 # plugins
-axion-release-plugin = "1.21.3"
+axion-release-plugin = "1.21.4"
 nexus-publish-plugin = "2.0.0"
 test-logger = "4.0.0"
 
